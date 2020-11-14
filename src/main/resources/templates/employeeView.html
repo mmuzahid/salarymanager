@@ -1,0 +1,44 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en" th:replace="fragments/header :: head"></head>
+<body>
+	<div class="container">
+		<h1><a href="/employee/">Salary Management</a></h1>	
+		<h3>Employee Payments</h1>	
+		<input type="hidden" id="empId" th:field="*{employee.id}" />
+		<div class="mb-1">
+			<label>Employee Name:</label><span  th:text="*{employee.name}"></span>
+			<label>Grade:</label> <span  th:text="*{employee.grade.name}"></span>
+		 
+		</div>
+		
+		<div id="payment-table"></div>
+	</div>
+	<script>
+		var empId = document.getElementById('empId').value;
+		var paymentTable = new Tabulator("#payment-table", {
+			pagination:"remote", //enable remote pagination
+			headerSort:false,
+			layout:"fitColumns",
+			responsiveLayout:"collapse",
+			placeholder: "No Payment Available",
+			ajaxURL:"/employee/getEmployeePayments/" + empId, //set url for ajax request
+				paginationDataReceived:{
+				"last_page":"max_pages", //change last_page parameter name to "max_pages"
+			},
+			paginationSize:10,
+			paginationDataReceived:{
+				"last_page":"totalPage", //change last_page parameter name to "max_pages"
+			} ,
+			columns:[
+				{ title: "Date", field: "createdAt" },
+				{ title: "Grade", field: "grade.name" },
+				{ title: "Amount", field: "amount" }
+			],
+		});
+
+
+	</script>
+	<footer lang="en" th:replace="fragments/footer :: footer"></footer>
+</body>
+</html>

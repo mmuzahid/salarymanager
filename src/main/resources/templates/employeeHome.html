@@ -1,0 +1,89 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en" th:replace="fragments/header :: head"></head>
+<body>
+	<div class="container">
+		<h1><a href="/employee/">Salary Management</a></h1>	
+		<span  th:text="*{balanceError}" class="text-danger"></span>
+		<span  th:text="*{balanceSuccess}" class="text-success"></span>	
+		<span  th:text="*{commonError}" class="text-danger"></span>
+		<span  th:text="*{commonSuccess}" class="text-success"></span>	
+		<div class="mb-1">
+			<form method="post" id="form" action="/employee/saveLowerBasic">
+				<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+				
+				<div class="form-group col-md-6">
+					<label for="employeeName">Lower Basic:</label> <span  th:text="*{lowerBasicAmount}"  ></span>
+				</div>
+				<div class="form-group col-md-6">				
+					<input type="text" id="lowerBasicAmount" required  name="lowerBasicAmount"  class="form-control" />
+					<button type="submit" class="btn btn-primary">Update Lower Basic</button>	
+				</div>
+			</form>
+		 
+		</div>
+		
+		<div class="mb-1"> 
+			<div class="form-group col-md-6">
+				<label for="employeeName">Current Company Balance:</label>				
+				<span  th:text="*{company.account.currentBalance}"  ></span>
+				<a href="/employee/paysalary" class="btn btn-primary">Pay Salary</a>
+			</div>
+		</div>
+		
+		<form method="post" id="form" action="/employee/increaseCompanyBalance">
+				<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+				
+				<div class="form-group col-md-4">
+					<label for="increaseAmount">Increase Company Balance</label>
+					<input type="text" id="increaseAmount" name="increaseAmount" required class="form-control"  />
+					<button type="submit" class="btn btn-primary">Submit</button>	
+				</div>
+
+		</form>
+		
+		<div class="mb-1"> 
+			<a href="/employee/add" class="btn  btn-outline-dark">
+			<i class="fa fa-plus" aria-hidden="true"></i> Add New Employee</a>
+		</div>
+		<div id="employee-table"></div>
+	</div>
+	<script>
+		var employeeTable = new Tabulator("#employee-table", {
+			pagination:"remote", //enable remote pagination
+			headerSort:false,
+			layout:"fitColumns",
+			responsiveLayout:"collapse",
+			placeholder: "No Employee Available",
+			ajaxURL:"/employee/list", //set url for ajax request
+				paginationDataReceived:{
+				"last_page":"max_pages", //change last_page parameter name to "max_pages"
+			},
+			paginationSize:10,
+			paginationDataReceived:{
+				"last_page":"totalPage", //change last_page parameter name to "max_pages"
+			} ,
+			columns:[
+				{ title: "Name", field: "name" },
+				{ title: "Grade", field: "grade.name" },
+				{ title: "Basic", field: "grade.basicSalary" },
+				{ title: "Salary", field: "salary" },
+				{ title: "Bank", field: "account.bank.name" },
+				{ title: "Branch", field: "account.branch.name" },
+				{	title: "Actions",
+					formatter:actionsFormatter, hozAlign:"center"}
+			],
+		});
+
+		//custom formatter definition
+		function actionsFormatter(cell, formatterParams, onRendered){ //plain text value
+			var viewButton = '<a href="/employee/' + cell.getData().id + '" class="btn btn-outline-info">View</a>';
+			var editButton = '<a href="/employee/edit/' + cell.getData().id + '" class="btn btn-outline-primary">Edit</a>';
+			var actions = viewButton + " " + editButton;
+			return actions;
+		};
+
+	</script>
+	<footer lang="en" th:replace="fragments/footer :: footer"></footer>
+</body>
+</html>
