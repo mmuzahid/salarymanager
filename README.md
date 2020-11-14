@@ -37,13 +37,4 @@
 
 		mvn clean spring-boot:run
 
-- Maven command to run application with test
-
-		mvn clean test spring-boot:run
-
-- Maven command to run test only
-
-		mvn clean test
-
-
 ### No Authentication Required
