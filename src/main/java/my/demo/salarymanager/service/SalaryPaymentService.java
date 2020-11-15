@@ -14,6 +14,6 @@ public interface SalaryPaymentService {
 	public void saveSalaryPayment(SalaryPayment salaryPayment);
 	public Page<SalaryPayment> getSalaryPaymentsPage(Integer page, Integer pageSize, String sortBy);
 	public List<SalaryPayment> getSalaryPaymentListByEmployeeId(Employee employee);
-	public Page<SalaryPayment> getSalaryPaymentListByEmployeeId(Employee employee, Integer page, Integer pageSize,
+	public Page<SalaryPayment> getSalaryPaymentListByEmployee(Employee employee, Integer page, Integer pageSize,
 			String sortBy);
 }

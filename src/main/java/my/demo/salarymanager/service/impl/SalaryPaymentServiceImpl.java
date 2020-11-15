@@ -67,17 +67,12 @@ public class SalaryPaymentServiceImpl implements SalaryPaymentService {
 	}
 	
 	@Override
-	public Page<SalaryPayment> getSalaryPaymentListByEmployeeId(Employee employee, Integer page, Integer pageSize, String sortBy) {		
+	public Page<SalaryPayment> getSalaryPaymentListByEmployee(Employee employee, Integer page, Integer pageSize, String sortBy) {		
 		
 		Pageable pageable = PageRequest.of(page.intValue(), pageSize, Sort.by(sortBy));
 		
-		SalaryPayment s = new SalaryPayment();
-		s.setEmployee(employee);
-		
-		Example<SalaryPayment> example = Example.of(s);
-		
-		Page<SalaryPayment> employeePage = salaryPaymentRepository.findAll(example, pageable);
-		return employeePage;
+		Page<SalaryPayment> payments = salaryPaymentRepository.findByEmployee(employee, pageable);
+		return payments;
 	}
 
 }

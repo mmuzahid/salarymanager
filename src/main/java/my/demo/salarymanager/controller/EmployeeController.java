@@ -103,8 +103,9 @@ public class EmployeeController {
 	public TabulatorDto<SalaryPayment> getEmployeePayments(@PathVariable(name="id") Long id,@RequestParam(name = "page", required = false, defaultValue = "1") Integer page,
 			@RequestParam(name = "size", required = false, defaultValue = "10") Integer pageSize, @RequestParam(name = "sortBy", required = false, defaultValue = "id") String sortBy) {
 		Employee employee =  employeeService.getEmployeeById(id);
-		
-		return TabulatorDtoConverter.<SalaryPayment>convertToDto(salaryPaymentService.getSalaryPaymentListByEmployeeId(employee, page, pageSize, sortBy));
+		Page<SalaryPayment> payments = salaryPaymentService.getSalaryPaymentListByEmployee(employee, page-1, pageSize, sortBy);
+		TabulatorDto tabulatorDto = TabulatorDtoConverter.<SalaryPayment>convertToDto(payments);
+		return tabulatorDto;
 	}
 	
 
